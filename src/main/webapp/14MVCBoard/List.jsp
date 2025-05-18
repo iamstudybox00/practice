@@ -11,6 +11,11 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 	</head>
+	<style>
+		a{
+			text-decoration: none;
+		}
+	</style>
 	<body>
 		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
             <div class="container-fluid">
@@ -21,7 +26,7 @@
                 <div class="collapse navbar-collapse" id="mynavbar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0)">자료게시판</a>
+                            <a class="nav-link" href="../mvcboard/list.do">게시판 목록 바로가기</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="javascript:void(0)">자료실</a>
@@ -61,33 +66,13 @@
                 </div>
             </div>
         </nav>
-		
-			<table border="1" width="90%">
-				<tr>
-					
-				</tr>
-			</table>
-			
-		</form>
-<!-- 		<table border="1" width="90%"> -->
-			
-<!-- 		</table> -->
-<!-- 		<table border="1" width="90%"> -->
-<!-- 		<tr align="center"> -->
-<!-- 			<td> -->
-<%-- 				${ map.pagingImg } --%>
-<!-- 			</td> -->
-<!-- 			<td width="100"><button type="button" onclick="location.href='../mvcboard/write.do';">글쓰기</button></td> -->
-<!-- 		</tr> -->
-<!-- 		</table> -->
-<!-- 	///////////////////////////////////////////////////////////////////////////// -->
-	<div class="row">
+	<div class="container row">
            <div class="col-sm-3">
                <div class="bg-secondary sm-8" style="border-radius: 5px; height: 70px; text-align: center; line-height: 70px; color: white; margin: 10px 0; font-size: large;">웹사이트 제작</div>
                <ul class="list-group list-group-flush">
-                   <li class="list-group-item active">자유게시판</li>
-                   <li class="list-group-item text-primary">자료실</li>
-                   <li class="list-group-item text-primary">방명록</li>
+                   <li class="list-group-item"><a href="../mvcboard/list.do">게시판 목록 바로가기</a></li>
+                   <li class="list-group-item">자료실</li>
+                   <li class="list-group-item">방명록</li>
                    <div class="dropdown dropend">
                        <a class="list-group-item dropdown-toggle text-primary" href="#" role="button" data-bs-toggle="dropdown">드롭다운</a>
                        <ul class="dropdown-menu">
@@ -98,30 +83,25 @@
                    </div>
                </ul>
            </div>
-           <div class="col-sm-8">
+           <div class="col-sm-9">
                <p class="h2" style="margin-top: 10px; float: left;">게시판 목록 -&nbsp;</p>
                <p class="h3" style="margin-top: 10px;">자유게시판</p>
-               <div class="container row">
-               <div class="input-group ">
-               		<form method="get">
-	                    <select name="searchField" class="form-select form row-4">
-	                       <option value="title" selected>제목</option>
-	                       <option value="user">작성자</option>
-	                       <option value="content" >내용</option>
-	                    </select>
-	                    <input type="text" name="searchWord" class="form-control col-4">
-	                    <button class="btn btn-warning col-4" type="submit">
+					<form method="get" class="input-group sm-8" > 
+					    <select class="form-select" name="searchField">
+					      <option value="title" selected>제목</option>
+					      <option value="name">작성자</option>
+					      <option value="content">내용</option>
+					    </select>
+					    <input type="text" name="searchWord" class="form-control w-75">
+					    <button class="btn btn-warning" type="submit">
 	                        <i class="bi bi-search"></i>
 	                    </button>
 	                </form>
-               </div>
-               </div>
-            <div class="container mt-3">      
-               <table class="table table-bordered table-striped ">
-                   <thead class="table-secondary border-top border-dark border-bottom">
+               <table class="table table-bordered table-striped mt-3">
+                   <thead class="table-secondary border-top border-dark border-bottom text-center">
                        <tr>
                            <th>번호</th>
-                           <th>제목</th>
+                           <th class="w-50">제목</th>
                            <th>작성자</th>
                            <th>작성일</th>
                            <th>조회수</th>
@@ -132,7 +112,7 @@
 						<c:choose>
 							<c:when test="${ empty boardLists }">
 								<tr>
-									<td colspan="5" align="center">
+									<td colspan="6" align="center">
 										등록된 게시물이 없습니다^^*
 									</td>
 								</tr>
@@ -149,7 +129,8 @@
 									<td>${ row.postDate }</td>
 									<td>
 									<c:if test="${ not empty row.ofile }">
-										<a href="../mvcboard/download.do?ofile=${ row.ofile }&sfile=${ row.sfile }&idx=${ row.idx }">[Down]</a>
+<%-- 										<a href="../mvcboard/download.do?ofile=${ row.ofile }&sfile=${ row.sfile }&idx=${ row.idx }">[Down]</a> --%>
+											<button type="button" onclick="location.href='../mvcboard/download.do?ofile=${ row.ofile }&sfile=${ row.sfile }&idx=${ row.idx }';" class="btn btn-outline-primary btn-sm">다운</button>
 									</c:if>
 									</td>
 								</tr>
@@ -158,8 +139,15 @@
 						</c:choose>
 					</tbody>
              	</table>
+             	<div class="container">
+             		<div class="text-center">
+						${ map.pagingImg }
+					</div>
+					<div class="text-end">							
+						<button type="button" onclick="location.href='../mvcboard/write.do';" class="btn btn-outline-primary">글쓰기</button>
+					</div>
+				</div>
             </div>
         </div>
-    </div>
 	</body>
 </html>

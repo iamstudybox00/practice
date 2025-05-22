@@ -18,7 +18,7 @@ public class WriteController extends HttpServlet
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
 			throws ServletException, IOException
 	{
-		req.getRequestDispatcher("/14MVCBoard/Write.jsp").forward(req, resp);
+		req.getRequestDispatcher("/MVCBoard/Write.jsp").forward(req, resp);
 	}
 	
 	@Override
@@ -33,7 +33,7 @@ public class WriteController extends HttpServlet
 			originalFileName = FileUtil.uploadFile(req, saveDirectory);
 		} catch (Exception e)
 		{
-			JSFunction.alertLocation(resp, "파일 업로드 오류 입니다.", "../mvcboard/write.do");
+			JSFunction.alertLocation(resp, "파일 업로드 오류 입니다.", "./mvcboard/write.do");
 			return;
 		}
 		
@@ -41,7 +41,6 @@ public class WriteController extends HttpServlet
 		dto.setName(req.getParameter("name"));
 		dto.setTitle(req.getParameter("title"));
 		dto.setContent(req.getParameter("content"));
-		dto.setPass(req.getParameter("pass"));
 		
 		if(originalFileName != "")
 		{
@@ -53,12 +52,12 @@ public class WriteController extends HttpServlet
 		}
 		
 		MVCBoardDAO dao = new MVCBoardDAO();
-		int result = dao.insertWrite(dto);
+		int result = dao.insertWrite(dto, req.getSession().getAttribute("UserIdx").toString());
 		dao.close();
 		
 		if(result == 1)
 		{
-			resp.sendRedirect("../mvcboard/list.do");
+			resp.sendRedirect("/mvcboard/list.do");
 		}else
 		{
 			JSFunction.alertLocation(resp, "글쓰기에 실패했습니다.", "../mvcboard/write.do");

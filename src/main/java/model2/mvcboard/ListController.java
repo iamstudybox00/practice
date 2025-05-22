@@ -63,6 +63,6 @@ public class ListController extends HttpServlet
 		
 		req.setAttribute("boardLists", boardLists);
 		req.setAttribute("map", map);
-		req.getRequestDispatcher("/14MVCBoard/List.jsp").forward(req, resp);
+		req.getRequestDispatcher("/MVCBoard/List.jsp").forward(req, resp);
 	}
 }

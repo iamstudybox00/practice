@@ -29,7 +29,7 @@ public class EditController extends HttpServlet
 		MVCBoardDAO dao = new MVCBoardDAO();
 		MVCBoardDTO dto = dao.selectView(idx);
 		req.setAttribute("dto", dto);
-		req.getRequestDispatcher("/14MVCBoard/Edit.jsp").forward(req, resp);
+		req.getRequestDispatcher("/MVCBoard/Edit.jsp").forward(req, resp);
 	}
 	
 	@Override

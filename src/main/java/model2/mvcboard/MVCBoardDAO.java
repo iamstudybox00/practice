@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import common.DBConnPool;
+import model2.mvcmember.MVCMemberDTO;
 
 public class MVCBoardDAO extends DBConnPool
 {
@@ -18,7 +19,7 @@ public class MVCBoardDAO extends DBConnPool
 	{
 		int totalCount = 0;
 		
-		String query = "SELECT COUNT(*) FROM mvcboard";
+		String query = "SELECT COUNT(*) FROM mymvcboard";
 		
 		if(map.get("searchWord") != null) 
 		{
@@ -47,13 +48,13 @@ public class MVCBoardDAO extends DBConnPool
 		
 		String query = "SELECT * FROM ( "
 				+ "     SELECT Tb.*, ROWNUM rNum FROM ( "
-				+ "         SELECT * FROM mvcboard ";
+				+ "         SELECT * FROM mymvcboard ";
 		if(map.get("searchWord") != null) 
 		{
 			query += " WHERE " + map.get("searchField") + " "
 					+ " LIKE '%" + map.get("searchWord") + "%' ";
 		}
-		query += "      ORDER BY idx DESC "
+		query += "      ORDER BY board_idx DESC "
 				+ "     ) Tb "
 				+ "  )  "
 				+ " WHERE rNum BETWEEN ? AND ?";
@@ -69,15 +70,15 @@ public class MVCBoardDAO extends DBConnPool
 			{
 				MVCBoardDTO dto = new MVCBoardDTO();
 
-				dto.setIdx(rs.getString(1));
-				dto.setName(rs.getString(2));
-				dto.setTitle(rs.getString(3));
-				dto.setContent(rs.getString(4));
-				dto.setPostDate(rs.getDate(5));
-				dto.setOfile(rs.getString(6));
-				dto.setSfile(rs.getString(7));
-				dto.setDownCount(rs.getInt(8));
-				dto.setPass(rs.getString(9));
+				dto.setBoard_idx(rs.getString(1));
+				dto.setUser_idx(rs.getString(2));
+				dto.setName(rs.getString(3));
+				dto.setTitle(rs.getString(4));
+				dto.setContent(rs.getString(5));
+				dto.setPostDate(rs.getDate(6));
+				dto.setOfile(rs.getString(7));
+				dto.setSfile(rs.getString(8));
+				dto.setDownCount(rs.getInt(9));
 				dto.setVisitCount(rs.getInt(10));
 				
 				board.add(dto);
@@ -91,24 +92,24 @@ public class MVCBoardDAO extends DBConnPool
 		return board;
 	}
 	
-	public int insertWrite(MVCBoardDTO dto)
+	public int insertWrite(MVCBoardDTO dto, String user_idx)
 	{
 		int result = 0;
 		
 		try
 		{
-			String query = "INSERT INTO mvcboard ( "
-					+ " idx, name, title, content, ofile, sfile, pass) "
+			String query = "INSERT INTO mymvcboard ( "
+					+ " board_idx, user_idx, name, title, content, ofile, sfile) "
 					+ " VALUES ( "
 					+ " seq_board_num.NEXTVAL, ?, ?, ?, ?, ?, ?)";
 			
 			psmt = con.prepareStatement(query);
-			psmt.setString(1, dto.getName());
-			psmt.setString(2, dto.getTitle());
-			psmt.setString(3, dto.getContent());
-			psmt.setString(4, dto.getOfile());
-			psmt.setString(5, dto.getSfile());
-			psmt.setString(6, dto.getPass());
+			psmt.setInt(1, Integer.parseInt(user_idx));
+			psmt.setString(2, dto.getName());
+			psmt.setString(3, dto.getTitle());
+			psmt.setString(4, dto.getContent());
+			psmt.setString(5, dto.getOfile());
+			psmt.setString(6, dto.getSfile());
 			
 			result = psmt.executeUpdate();
 		} catch (Exception e)
@@ -120,29 +121,29 @@ public class MVCBoardDAO extends DBConnPool
 		return result;
 	}
 	
-	public MVCBoardDTO selectView(String idx) 
+	public MVCBoardDTO selectView(String board_idx) 
 	{
 		MVCBoardDTO dto = new MVCBoardDTO();
 		
-		String query = "SELECT * FROM mvcboard WHERE idx=?";
+		String query = "SELECT * FROM mymvcboard WHERE board_idx=?";
 		
 		try
 		{
 			psmt = con.prepareStatement(query);
-			psmt.setString(1, idx);
+			psmt.setString(1, board_idx);
 			rs = psmt.executeQuery();
 			
 			if(rs.next())
 			{
-				dto.setIdx(rs.getString(1));
-				dto.setName(rs.getString(2));
-				dto.setTitle(rs.getString(3));
-				dto.setContent(rs.getString(4));
-				dto.setPostDate(rs.getDate(5));
-				dto.setOfile(rs.getString(6));
-				dto.setSfile(rs.getString(7));
-				dto.setDownCount(rs.getInt(8));
-				dto.setPass(rs.getString(9));
+				dto.setBoard_idx(rs.getString(1));
+				dto.setUser_idx(rs.getString(2));
+				dto.setName(rs.getString(3));
+				dto.setTitle(rs.getString(4));
+				dto.setContent(rs.getString(5));
+				dto.setPostDate(rs.getDate(6));
+				dto.setOfile(rs.getString(7));
+				dto.setSfile(rs.getString(8));
+				dto.setDownCount(rs.getInt(9));
 				dto.setVisitCount(rs.getInt(10));
 			}
 		} catch (Exception e)
@@ -155,7 +156,7 @@ public class MVCBoardDAO extends DBConnPool
 	
 	public void updateVisitCount(String idx)
 	{
-		String query = "UPDATE mvcboard SET "
+		String query = "UPDATE mymvcboard SET "
 				+ " visitcount=visitcount+1 "
 				+ " WHERE idx=?";
 		
@@ -173,9 +174,9 @@ public class MVCBoardDAO extends DBConnPool
 	
 	public void downCountPlus(String idx)
 	{
-		String sql = "UPDATE mvcboard SET "
+		String sql = "UPDATE mymvcboard SET "
 				+ " downcount=downcount+1 "
-				+ " WHERE idx=? ";
+				+ " WHERE board_idx=? ";
 		
 		try
 		{
@@ -189,40 +190,16 @@ public class MVCBoardDAO extends DBConnPool
 		}
 	}
 	
-	public boolean confirmPassword(String pass, String idx)
-	{
-		boolean isCorr = true;
-		try
-		{
-			String sql = "SELECT COUNT(*) FROM mvcboard WHERE pass=? AND idx=?";
-			psmt = con.prepareStatement(sql);
-			psmt.setString(1, pass);
-			psmt.setString(2, idx);
-			rs = psmt.executeQuery();
-			rs.next();
-			if(rs.getInt(1) == 0)
-			{
-				isCorr = false;
-			}
-		} catch (Exception e)
-		{
-			isCorr = false;
-			e.printStackTrace();
-		}
-
-		return isCorr;
-	}
-	
 	public int deletePost(MVCBoardDTO dto) 
 	{
 		int result = 0;
 		
 		try
 		{
-			String query = "DELETE FROM mvcboard WHERE idx=?";
+			String query = "DELETE FROM mymvcboard WHERE board_idx=?";
 			
 			psmt = con.prepareStatement(query);
-			psmt.setString(1, dto.getIdx());
+			psmt.setString(1, dto.getBoard_idx());
 			result = psmt.executeUpdate();
 		} catch (Exception e)
 		{
@@ -238,9 +215,9 @@ public class MVCBoardDAO extends DBConnPool
 		int result = 0;
 		try
 		{
-			String query = "UPDATE mvcboard "
+			String query = "UPDATE mymvcboard "
 					+ " SET title=?, name=?, content=?, ofile=?, sfile=? "
-					+ " WHERE idx=? AND pass=?";
+					+ " WHERE board_idx=?";
 			
 			psmt = con.prepareStatement(query);
 			psmt.setString(1, dto.getTitle());
@@ -248,8 +225,7 @@ public class MVCBoardDAO extends DBConnPool
 			psmt.setString(3, dto.getContent());
 			psmt.setString(4, dto.getOfile());
 			psmt.setString(5, dto.getSfile());
-			psmt.setString(6, dto.getIdx());
-			psmt.setString(7, dto.getPass());
+			psmt.setString(6, dto.getBoard_idx());
 			
 			result = psmt.executeUpdate();
 		} catch (Exception e)

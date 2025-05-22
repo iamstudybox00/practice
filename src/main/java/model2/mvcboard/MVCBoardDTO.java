@@ -2,7 +2,8 @@ package model2.mvcboard;
 
 public class MVCBoardDTO
 {
-	private String idx;
+	private String board_idx;
+	private String user_idx;
 	private String name;
 	private String title;
 	private String content;
@@ -10,16 +11,23 @@ public class MVCBoardDTO
 	private String ofile;
 	private String sfile;
 	private int downCount;
-	private String pass;
 	private int visitCount;
 	
-	public String getIdx()
+	public String getBoard_idx()
 	{
-		return idx;
+		return board_idx;
 	}
-	public void setIdx(String idx)
+	public void setBoard_idx(String board_idx)
 	{
-		this.idx = idx;
+		this.board_idx = board_idx;
+	}
+	public String getUser_idx()
+	{
+		return user_idx;
+	}
+	public void setUser_idx(String user_idx)
+	{
+		this.user_idx = user_idx;
 	}
 	public String getName()
 	{
@@ -76,14 +84,6 @@ public class MVCBoardDTO
 	public void setDownCount(int downCount)
 	{
 		this.downCount = downCount;
-	}
-	public String getPass()
-	{
-		return pass;
-	}
-	public void setPass(String pass)
-	{
-		this.pass = pass;
 	}
 	public int getVisitCount()
 	{

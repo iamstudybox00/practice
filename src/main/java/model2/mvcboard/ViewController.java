@@ -41,6 +41,6 @@ public class ViewController extends HttpServlet
 		
 		req.setAttribute("dto", dto);
 		req.setAttribute("isImage", isImage);
-		req.getRequestDispatcher("/14MVCBoard/View.jsp").forward(req, resp);
+		req.getRequestDispatcher("/MVCBoard/View.jsp").forward(req, resp);
 	}
 }

@@ -28,11 +28,11 @@
 //	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 //			throws ServletException, IOException
 //	{
-//		String idx = req.getParameter("idx");
+//		String board_idx = req.getParameter("board_idx");
 //		String mode = req.getParameter("mode");
 //		String pass = req.getParameter("pass");
 //		MVCBoardDAO dao = new MVCBoardDAO();
-//		boolean confirmed = dao.confirmPassword(pass, idx);
+////		boolean confirmed = dao.confirmPassword(pass, board_idx);
 //		dao.close();
 //		
 //		if(confirmed)
@@ -41,12 +41,15 @@
 //			{
 //				HttpSession session = req.getSession();
 //				session.setAttribute("pass", pass);
-//				resp.sendRedirect("../mvcboard/edit.do?idx=" + idx);
+//				resp.sendRedirect("../mvcboard/edit.do?board_idx=" + board_idx);
 //			} else if(mode.equals("delete"))
 //			{
 //				dao = new MVCBoardDAO();
-//				MVCBoardDTO dto = dao.selectView(idx);
-//				int result = dao.deletePost(dto);
+//				MVCBoardDTO dto = dao.selectView(board_idx);
+//				if(dto.getUser_i  dx().equals(req.getParameter("UserId")))
+//				{
+//					int result = dao.deletePost(dto);
+//				}
 //				dao.close();
 //				
 //				if(result == 1)

@@ -25,9 +25,9 @@ public class EditController extends HttpServlet
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException
 	{
-		String idx = req.getParameter("idx");
+		String board_idx = req.getParameter("board_idx");
 		MVCBoardDAO dao = new MVCBoardDAO();
-		MVCBoardDTO dto = dao.selectView(idx);
+		MVCBoardDTO dto = dao.selectView(board_idx);
 		req.setAttribute("dto", dto);
 		req.getRequestDispatcher("/MVCBoard/Edit.jsp").forward(req, resp);
 	}
@@ -48,7 +48,8 @@ public class EditController extends HttpServlet
 			return;
 		}
 		
-		String idx = req.getParameter("idx");
+		String board_idx = req.getParameter("board_idx");
+		String user_idx = req.getParameter("user_idx");
 		String prevOfile = req.getParameter("prevOfile");
 		String prevSfile = req.getParameter("prevSfile");
 		
@@ -56,15 +57,13 @@ public class EditController extends HttpServlet
 		String title = req.getParameter("title");
 		String content = req.getParameter("content");
 		
-		HttpSession session = req.getSession();
-		String pass = (String)session.getAttribute("pass");
-		
 		MVCBoardDTO dto = new MVCBoardDTO();
-		dto.setIdx(idx);
+		System.out.println(board_idx);
+		dto.setBoard_idx(board_idx);
+		dto.setUser_idx(user_idx);
 		dto.setName(name);
 		dto.setTitle(title);
 		dto.setContent(content);
-		dto.setPass(pass);
 		
 		if(originalFileName != "")
 		{
@@ -86,12 +85,11 @@ public class EditController extends HttpServlet
 		
 		if(result == 1)
 		{
-			session.removeAttribute("pass");
-			resp.sendRedirect("../mvcboard/view.do?idx=" + idx);
+			resp.sendRedirect("../mvcboard/view.do?board_idx=" + board_idx);
 		}else
 		{
-			JSFunction.alertLocation(resp, "비밀번호 검증을 다시 진행해주세요.", 
-					"../mvcboard/view.do?idx=" + idx);
+			JSFunction.alertLocation(resp, "수정 실패", 
+					"../mvcboard/view.do?idx=" + board_idx);
 		}
 	}
 }

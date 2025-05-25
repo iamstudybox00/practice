@@ -57,7 +57,7 @@ public class WriteController extends HttpServlet
 		
 		if(result == 1)
 		{
-			resp.sendRedirect("/mvcboard/list.do");
+			resp.sendRedirect("../mvcboard/list.do");
 		}else
 		{
 			JSFunction.alertLocation(resp, "글쓰기에 실패했습니다.", "../mvcboard/write.do");

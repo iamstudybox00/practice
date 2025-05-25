@@ -20,8 +20,7 @@ public class DownloadController extends HttpServlet
 	{
 		String ofile = req.getParameter("ofile");
 		String sfile = req.getParameter("sfile");
-		String idx = req.getParameter("idx");
-		
+		String idx = req.getParameter("board_idx");
 		FileUtil.download(req, resp, "/Uploads", sfile, ofile);
 		
 		MVCBoardDAO dao = new MVCBoardDAO();

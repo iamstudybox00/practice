@@ -20,9 +20,10 @@ public class ViewController extends HttpServlet
 			throws ServletException, IOException
 	{
 		MVCBoardDAO dao = new MVCBoardDAO();
-		String idx = req.getParameter("idx");
-		dao.updateVisitCount(idx);
-		MVCBoardDTO dto = dao.selectView(idx);
+		String board_idx = req.getParameter("board_idx");
+		dao.updateVisitCount(board_idx);
+		MVCBoardDTO dto = dao.selectView(board_idx);
+		dto.getBoard_idx();
 		dao.close();
 		dto.setContent(dto.getContent().replaceAll("\r\n", "<br/>"));
 		
@@ -38,9 +39,20 @@ public class ViewController extends HttpServlet
 		{
 			isImage = true;
 		}
-		
+		req.setAttribute("permission", havePermission(dto.getUser_idx(), req.getSession().getAttribute("UserIdx")));
+
 		req.setAttribute("dto", dto);
 		req.setAttribute("isImage", isImage);
 		req.getRequestDispatcher("/MVCBoard/View.jsp").forward(req, resp);
+	}
+	
+	String havePermission(String boardUserIdx, Object currUserIdx) {
+		// 자기가 쓴 게시물일 경우
+		String currUser = currUserIdx == null ? "noPer" : currUserIdx.toString();
+		if(currUser.equals(boardUserIdx)) {	
+			return "havePer";
+		}
+		
+		return "noPer";
 	}
 }

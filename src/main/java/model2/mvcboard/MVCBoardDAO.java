@@ -158,7 +158,7 @@ public class MVCBoardDAO extends DBConnPool
 	{
 		String query = "UPDATE mymvcboard SET "
 				+ " visitcount=visitcount+1 "
-				+ " WHERE idx=?";
+				+ " WHERE board_idx=?";
 		
 		try
 		{
@@ -180,6 +180,7 @@ public class MVCBoardDAO extends DBConnPool
 		
 		try
 		{
+			System.out.println(idx);
 			psmt = con.prepareStatement(sql);
 			psmt.setString(1, idx);
 			psmt.executeQuery();

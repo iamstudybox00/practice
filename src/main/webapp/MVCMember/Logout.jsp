@@ -10,5 +10,5 @@ session.removeAttribute("UserName");
 session.invalidate();
 
 //속성 삭제 후 페이지 이동
-response.sendRedirect("../MVCBoard/List.jsp");
+response.sendRedirect("../mvcboard/list.do");
 %>
